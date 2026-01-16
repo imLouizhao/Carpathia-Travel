@@ -1,6 +1,4 @@
 <?php
-// functions.php
-
 if (!function_exists('getProduse')) {
 
 function getProduse($filtruCategorie = '', $filtruPret = '', $sortare = '', $pagina = 1, $produsePerPagina = 8) {
@@ -39,7 +37,6 @@ function getProduse($filtruCategorie = '', $filtruPret = '', $sortare = '', $pag
         $whereClause = "WHERE " . implode(" AND ", $where);
     }
 
-    // ✅ ORDER BY default (altfel ai undefined $orderBy)
     $orderBy = "ORDER BY p.id DESC";
     switch ($sortare) {
         case 'Sortează după preț: crescător':
@@ -49,7 +46,6 @@ function getProduse($filtruCategorie = '', $filtruPret = '', $sortare = '', $pag
             $orderBy = "ORDER BY p.pret DESC, p.id DESC";
             break;
         case 'Sortează după evaluare':
-            // dacă nu ai coloana rating, scoate linia asta
             $orderBy = "ORDER BY p.rating DESC, p.id DESC";
             break;
     }
