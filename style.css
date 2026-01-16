@@ -31,8 +31,6 @@ main {
     padding-bottom: 25px;
 }
 
-/* Stoc produse */
-
 .product-stock {
     margin: 10px 0;
     font-weight: bold;
@@ -50,7 +48,6 @@ main {
     color: #dc3545;
 }
 
-/* Header și navigație */
 header { 
     background-color: #fff; 
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); 
@@ -65,7 +62,6 @@ header {
     align-items: center; 
 }
 
-/* Top Bar - Design Profesional */
 .top-bar-container {
     width: 100%;
     max-width: 1200px;
@@ -132,8 +128,8 @@ header {
     gap: 15px;
     white-space: nowrap;
     margin-bottom: 10px;
-    position: relative; /* Adaugă această linie */
-    top: -4px; /* Forțează cu 5px mai sus */
+    position: relative; 
+    top: -4px; 
 }
 
 .auth-links a {
@@ -187,7 +183,6 @@ header {
     font-size: 120px;
 }
 
-/* Animatie subtilă la încărcare */
 @keyframes slideDown {
     from {
         opacity: 0;
@@ -203,12 +198,10 @@ header {
     animation: slideDown 0.5s ease-out;
 }
 
-/* Efect de glow la hover pe întreg top-bar */
 .top-bar:hover {
     background: linear-gradient(135deg, #8B7355 0%, #b89a75 100%);
 }
 
-/* Stilizare pentru a evidenția că sunt în capete */
 .contact-info {
     border-right: 1px solid rgba(255,255,255,0.1);
 }
@@ -217,12 +210,10 @@ header {
     border-left: 1px solid rgba(255,255,255,0.1);
 }
 
-/* Efect de hover pe întreg top-bar */
 .top-bar-content > *:hover {
     background: rgba(255,255,255,0.05);
 }
 
-/* Responsive */
 @media (max-width: 768px) {
     .top-bar-content {
         flex-direction: column;
@@ -339,9 +330,6 @@ nav ul li a.active {
     justify-content: center; 
 }
 
-
-
-/* Hero Sections */
 .hero,
 .page-hero {
     background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('alte_poze/turism_photo.jpg');
@@ -373,7 +361,6 @@ nav ul li a.active {
     margin: 0 auto 30px;
 }
 
-/* Butoane */
 .btn {
     display: inline-block;
     background-color: #8B7355;
@@ -389,7 +376,6 @@ nav ul li a.active {
     background-color: #6d5c46;
 }
 
-/* Sectiuni comune */
 .section-title {
     text-align: center;
     margin-bottom: 40px;
@@ -397,7 +383,6 @@ nav ul li a.active {
     color: #333;
 }
 
-/* Categorii */
 .categories {
     padding: 40px 0;
 }
@@ -436,7 +421,6 @@ nav ul li a.active {
     color: #8B7355;
 }
 
-/* Produse */
 .popular-products {
     padding: 40px 0;
     background-color: #f5f5f5;
@@ -528,7 +512,6 @@ nav ul li a.active {
     display: block;
 }
 
-/* About Section */
 .about,
 .about-section {
     padding: 60px 0;
@@ -559,7 +542,6 @@ nav ul li a.active {
     border-radius: 10px;
 }
 
-/* Newsletter */
 .newsletter {
     background-color: #8B7355;
     color: white;
@@ -599,7 +581,6 @@ nav ul li a.active {
     font-weight: bold;
 }
 
-/* Filtre și sortare */
 .filters { 
     background-color: white; 
     padding: 20px; 
@@ -654,7 +635,6 @@ nav ul li a.active {
     border-radius: 5px; 
 }
 
-/* Galerie produse */
 .product-gallery {
     position: relative;
     height: 250px;
@@ -808,7 +788,6 @@ nav ul li a.active {
     background-color: #6d5c46;
 }
 
-/* Produse similare */
 .similar-products {
     margin-top: 80px;
     padding: 40px 0;
@@ -822,7 +801,6 @@ nav ul li a.active {
     text-align: center;
 }
 
-/* Paginare */
 .pagination { 
     display: flex; 
     justify-content: center; 
@@ -849,7 +827,6 @@ nav ul li a.active {
     background-color: #ddd; 
 }
 
-/* Autentificare */
 .auth-container {
     max-width: 400px;
     margin: 50px auto;
@@ -896,7 +873,6 @@ nav ul li a.active {
     margin-top: 20px;
 }
 
-/* Content Sections */
 .content-section {
     background: white;
     padding: 50px;
@@ -938,7 +914,6 @@ nav ul li a.active {
     margin: 20px 0;
 }
 
-/* Timeline */
 .timeline {
     display: flex;
     justify-content: space-between;
@@ -1016,7 +991,6 @@ nav ul li a.active {
     color: #333;
 }
 
-/* Footer */
 footer { 
     background-color: #333; 
     color: white; 
@@ -1085,7 +1059,6 @@ footer {
     flex-wrap: wrap;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
     .header-main { 
         flex-direction: column; 
@@ -1198,9 +1171,6 @@ footer {
     }
 }
 
-/* ===== STILURI SPECIFICE PAGINII DE CONTACT ===== */
-
-/* Contact Section */
 .contact-section {
     padding: 60px 0;
 }
@@ -1211,7 +1181,6 @@ footer {
     margin-bottom: 60px;
 }
 
-/* Contact Details - schimbat din contact-info */
 .contact-details {
     flex: 1;
     background-color: white;
@@ -1220,7 +1189,6 @@ footer {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
 }
 
-/* Message Form - schimbat din contact-form */
 .message-form {
     flex: 1;
     background-color: white;
@@ -1229,7 +1197,6 @@ footer {
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
 }
 
-/* Contact Items - schimbat din info-item */
 .contact-item {
     display: flex;
     align-items: flex-start;
@@ -1255,7 +1222,6 @@ footer {
     line-height: 1.5;
 }
 
-/* Message Fields - schimbat din form-group */
 .message-field {
     margin-bottom: 20px;
 }
@@ -1288,7 +1254,6 @@ footer {
     resize: vertical;
 }
 
-/* FAQ Section */
 .faq-section {
     padding: 60px 0;
     background-color: white;
@@ -1331,7 +1296,6 @@ footer {
     transform: rotate(180deg);
 }
 
-/* Responsive pentru Contact Page */
 @media (max-width: 768px) {
     .contact-content {
         flex-direction: column;
@@ -1359,9 +1323,6 @@ footer {
         padding: 20px 15px;
     }
 }
-
-
-/* ===== STILURI SPECIFICE PAGINII COȘ ===== */
 
 .cos-container {
     margin: 40px auto;
@@ -1465,7 +1426,6 @@ footer {
     background-color: #218838;
 }
 
-/* Stiluri pentru controalele de cantitate */
 .quantity-controls {
     display: flex;
     align-items: center;
@@ -1542,8 +1502,6 @@ footer {
   }
 }
 
-
-/* Elimină săgețile default din input number */
 .quantity-input::-webkit-outer-spin-button,
 .quantity-input::-webkit-inner-spin-button {
     -webkit-appearance: none;
@@ -1554,7 +1512,6 @@ footer {
     -moz-appearance: textfield;
 }
 
-/* Formular checkout */
 .checkout-form {
     background: white;
     padding: 30px;
@@ -1697,7 +1654,6 @@ footer {
     background: #6d5c46;
 }
 
-/* Cookies Banner */
 .cookies-banner {
     position: fixed;
     bottom: 0;
@@ -1772,7 +1728,6 @@ footer {
     background: rgba(255,255,255,0.1);
 }
 
-/* Butoane specifice cos */
 .btn-cos {
     background: #8B7355;
     color: white;
@@ -1789,7 +1744,6 @@ footer {
     background: #6d5c46;
 }
 
-/* Responsive pentru pagina cos */
 @media (max-width: 768px) {
     .cos-item {
         flex-direction: column;
