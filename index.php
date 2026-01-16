@@ -1,7 +1,5 @@
 <?php
-// Mută acest cod înainte de orice output HTML
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id_produs'])) {
-    // Redirecționează la fișierul separat pentru procesare
     header('Location: adauga_cos.php');
     exit;
 }
@@ -16,10 +14,8 @@ require 'header.php';
     <title>Bijuterii din Perle Naturale | Magazin Online</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
-    <!-- Adaugă un link pentru favicon -->
     <link rel="icon" type="image/jpeg" href="alte_poze/logo_luna_pearl_borderless.jpeg">
     <style>
-        /* Stiluri pentru carduri de produse pe pagina principală */
         .product-card {
             display: flex;
             flex-direction: column;
@@ -35,7 +31,7 @@ require 'header.php';
         }
         
         .product-content-bottom {
-            margin-top: auto; /* Împinge acest grup la fund */
+            margin-top: auto; 
             padding-top: 10px;
             border-top: 1px solid #eee;
         }
@@ -68,7 +64,6 @@ require 'header.php';
             background-position: center;
         }
         
-        /* Grup pentru titlu și rating */
         .product-top-content {
             margin-bottom: 15px;
         }
@@ -186,4 +181,5 @@ require 'header.php';
 </body>
 </html>
 <?php require 'footer.php' ?>
+
 <?php if(isset($conn)) $conn->close(); ?>
