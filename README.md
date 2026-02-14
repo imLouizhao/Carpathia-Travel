@@ -3,9 +3,14 @@ Proiect la materia Dezvoltarea Aplicatiilor Web realizat de Simion Louis, studen
 Realizat folosind urmatoarele limbaje de programare: PHP, HTML, CSS, SQL, JavaScript
 
 Metoda hosting: InfinityFree
-URL: carpathiatravel.free.nf
+URL: https://carpathiatravel.free.nf/?i=1
 
 <---------->
+
+  <?> Date de acces la utilizatori: <?>
+
+  admin: admincarptravel@gmail.com / admincarptravel
+  agent: agentcarptravel@gmail.com / agentcarptravel
 
   <?> Descriere succinta a bazei de date: <?>
 
