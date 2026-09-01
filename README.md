@@ -3,7 +3,7 @@ Proiect la materia Dezvoltarea Aplicatiilor Web realizat de Simion Louis, studen
 Realizat folosind urmatoarele limbaje de programare: PHP, HTML, CSS, SQL, JavaScript
 
 Metoda hosting: InfinityFree
-URL: https://carpathiatravel.free.nf/?i=1
+URL: https://carpathiatravel.free.nf
 
 <---------->
 
