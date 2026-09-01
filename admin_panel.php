@@ -37,9 +37,6 @@ function badgeStatus(string $s): string {
     <div class="container" style="margin-top:30px;">
         <div class="content-section">
             <h2 style="margin-bottom:10px;">Panou <?php echo esc(ucfirst($role)); ?></h2>
-            <p style="color:#666; margin-bottom:25px;">
-                Aici se verifică separarea rolurilor: agentul poate gestiona comenzi, iar adminul poate gestiona comenzi + produse + utilizatori.
-            </p>
 
             <?php if ($success_message): ?>
                 <div class="highlight" style="border-left-color:#28a745;">
