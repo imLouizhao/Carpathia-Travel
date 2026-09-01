@@ -150,24 +150,22 @@ require 'header.php';
                     body: 'id_produs=' + encodeURIComponent(id) +
                         '&cantitate=' + encodeURIComponent(qty)
                 })
-                .then(r => r.text())
-                .then(txt => {
-                    const resp = txt.trim();
-
-                    if (resp === 'login_required') {
+                .then(r => r.json())
+                .then(data => {
+                    if (data.message === 'login_required') {
                         if (confirm('Trebuie să fii autentificat pentru a rezerva. Mergi la login?')) {
                             window.location.href = 'login.php';
                         }
                         return;
                     }
 
-                    if (resp === 'success') {
+                    if (data.success) {
                         alert('Pachetul a fost adăugat în coș!');
                         location.reload();
                         return;
                     }
 
-                    alert('Eroare la adăugarea în coș!');
+                    alert('Eroare la adăugarea în coș: ' + (data.message || 'eroare necunoscută'));
                 })
                 .catch(() => {
                     alert('Eroare de rețea!');
