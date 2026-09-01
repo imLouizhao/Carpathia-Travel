@@ -9,10 +9,6 @@ if (empty($_SESSION['csrf_token'])) {
 }
 $csrf_token = $_SESSION['csrf_token'];
 
-function esc($v): string {
-    return htmlspecialchars((string)($v ?? ''), ENT_QUOTES, 'UTF-8');
-}
-
 $success_message = $_SESSION['success_message'] ?? null;
 $error_message   = $_SESSION['error_message'] ?? null;
 unset($_SESSION['success_message'], $_SESSION['error_message']);
