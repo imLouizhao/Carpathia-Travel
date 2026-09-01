@@ -3,10 +3,10 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
-$servername = "sql306.infinityfree.com";
-$username = "if0_40904287";
-$password = "4SmqwVsqUWJ6io";
-$dbname = "if0_40904287_carp_travel";
+$servername = "sql303.infinityfree.com";
+$username = "if0_42800258";
+$password = "esY3OapkLj5D";
+$dbname = "if0_42800258_carp_travel";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
