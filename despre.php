@@ -1,4 +1,6 @@
 <?php
+$pageTitle = 'Despre noi - Carpathia Travel';
+$pageDescription = 'Află cine este Carpathia Travel: misiunea, valorile și modul în care organizăm vacanțele clienților noștri.';
 require 'header.php';
 ?>
 <!DOCTYPE html>
@@ -6,7 +8,6 @@ require 'header.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Despre noi - Carpathia Travel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -40,6 +41,22 @@ require 'header.php';
                     <p>Rezervările realizate prin platformă sunt analizate și confirmate de un agent, pentru a asigura corectitudinea datelor și disponibilitatea serviciilor incluse.</p>
                     <a href="contact.php" class="btn">Contactează-ne</a>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="about-section" style="padding-top:0;">
+        <div class="container">
+            <h2 class="section-title">Prezentarea agenției</h2>
+            <div style="max-width:900px; margin:0 auto;">
+                <video controls preload="none" poster="alte_poze/turism_photo.jpg" style="width:100%; border-radius:10px; box-shadow:0 5px 15px rgba(0,0,0,0.1); display:block;">
+                    <source src="alte_poze/carpathia_travel_prezentare.mp4" type="video/mp4">
+                    Browser-ul tău nu suportă redarea video. Poți descărca materialul
+                    <a href="alte_poze/carpathia_travel_prezentare.mp4">aici</a>.
+                </video>
+                <p style="text-align:center; color:#666; margin-top:10px;">
+                    Un scurt material video de prezentare a agenției Carpathia Travel.
+                </p>
             </div>
         </div>
     </section>
