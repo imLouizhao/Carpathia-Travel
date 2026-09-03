@@ -29,6 +29,9 @@ function badgeStatus(string $s): string {
     return $map[$s] ?? $s;
 }
 
+$pageTitle = 'Panou administrare - Carpathia Travel';
+$pageDescription = 'Panou intern de administrare Carpathia Travel.';
+$noIndex = true;
 ?>
 
 <?php require 'header.php'; ?>
@@ -74,6 +77,20 @@ function badgeStatus(string $s): string {
                 ?>
 
                 <h3 style="margin-bottom:15px;">Gestionare comenzi</h3>
+
+                <div style="display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap;">
+                    <span style="align-self:center; color:#666;">Exportă:</span>
+                    <a class="btn" style="padding:8px 14px;" href="export.php?entity=orders&amp;format=csv">
+                        <i class="fas fa-file-csv"></i> CSV / Excel
+                    </a>
+                    <a class="btn" style="padding:8px 14px;" href="export.php?entity=orders&amp;format=doc">
+                        <i class="fas fa-file-word"></i> Word
+                    </a>
+                    <a class="btn" style="padding:8px 14px;" href="export.php?entity=orders&amp;format=pdf">
+                        <i class="fas fa-file-pdf"></i> PDF
+                    </a>
+                </div>
+
                 <div style="overflow:auto;">
                     <table style="width:100%; border-collapse:collapse;">
                         <thead>
@@ -172,6 +189,19 @@ function badgeStatus(string $s): string {
                 $products = $conn->query("SELECT id, tip_pachet, plecare, destinatie, pret, durata, locuri_disponibile, data_plecare FROM produse ORDER BY id DESC");
                 ?>
                 <h3 style="margin-bottom:15px;">Gestionare produse</h3>
+
+                <div style="display:flex; gap:10px; margin-bottom:15px; flex-wrap:wrap;">
+                    <span style="align-self:center; color:#666;">Exportă:</span>
+                    <a class="btn" style="padding:8px 14px;" href="export.php?entity=products&amp;format=csv">
+                        <i class="fas fa-file-csv"></i> CSV / Excel
+                    </a>
+                    <a class="btn" style="padding:8px 14px;" href="export.php?entity=products&amp;format=doc">
+                        <i class="fas fa-file-word"></i> Word
+                    </a>
+                    <a class="btn" style="padding:8px 14px;" href="export.php?entity=products&amp;format=pdf">
+                        <i class="fas fa-file-pdf"></i> PDF
+                    </a>
+                </div>
 
                 <div class="highlight" style="margin-bottom:25px;">
                     <strong>Adaugă produs nou</strong>
