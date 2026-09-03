@@ -21,3 +21,5 @@ Tabele: comenzi, comenzi_produse, cos_cumparaturi, imagini_produse, produse, uti
 Fiecare comanda din tabela "comenzi" contine id_utilizator ca FK al tabelei "utilizatori", iar tabela "comenzi_produse" contine id_comanda ca FK al tabelei "comenzi".
 La tabela "imagini_produse", fiecare imagine are o ordine de afisare si este specifica unui id_produs FK de la tabela "produse".
 Fiecare pachet turistic (produs) are un tip_pachet specific (City Break, Circuit, Litoral, Munte).
+
+Conectarea SMTP (Google) se face prin PHPMailer.
