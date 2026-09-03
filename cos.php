@@ -137,7 +137,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $cartStmt = $conn->prepare("
             SELECT c.id AS id_cos, c.id_produs, c.cantitate,
-                   p.pret, p.locuri_disponibile
+                   p.pret, p.locuri_disponibile, p.plecare, p.destinatie
             FROM cos_cumparaturi c
             JOIN produse p ON p.id = c.id_produs
             WHERE c.id_utilizator = ?
@@ -215,7 +215,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $clr->close();
 
             $conn->commit();
-            $_SESSION['success_message'] = "Comanda a fost plasată cu succes! (ID comanda: #{$id_comanda})";
+
+            trimiteEmailComanda($id_comanda, $nume, $email, $telefon, $obs, $cartItems, $total);
+
+            $_SESSION['success_message'] = "Comanda a fost plasată cu succes! (ID comanda: #{$id_comanda}) Un email de confirmare a fost trimis la adresa {$email}.";
             header('Location: cos.php');
             exit;
 
@@ -276,6 +279,10 @@ if (isset($_SESSION['user_id'])) {
     $stmt->close();
 }
 
+$pageTitle = 'Coșul tău - Carpathia Travel';
+$pageDescription = 'Verifică pachetele turistice adăugate în coș și finalizează rezervarea.';
+$noIndex = true;
+
 require 'header.php';
 ?>
 <!DOCTYPE html>
@@ -283,43 +290,34 @@ require 'header.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coș - Carpathia Travel</title>
     <link rel="stylesheet" href="style.css">
     <style>
         .cos-container { margin: 40px auto; padding: 20px; }
         .cos-title { text-align: center; margin-bottom: 30px; color: #333; }
-
         .alert { padding: 15px; text-align: center; margin: 20px auto; max-width: 1200px; border-radius: 5px; }
         .alert-success { background: #d4edda; color: #155724; }
         .alert-error { background: #f8d7da; color: #721c24; }
-
         .cos-item { display: flex; align-items: center; background: #fff; padding: 20px; margin-bottom: 15px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); gap: 15px; }
         .cos-item-img { width: 110px; height: 90px; background-size: cover; background-position: center; border-radius: 8px; flex: 0 0 auto; }
         .cos-item-details { flex: 1; }
         .cos-item-details h3 { margin: 0 0 5px 0; }
         .cos-item-details .meta { color: #666; font-size: 14px; }
-
         .qty-wrap { display: flex; align-items: center; gap: 10px; }
         .qty-controls { display: inline-flex; align-items: center; gap: 6px; }
         .qty-btn { width: 32px; height: 32px; border: 1px solid #ddd; background: #f9f9f9; border-radius: 6px; cursor: pointer; font-weight: 700; }
         .qty-btn:disabled { opacity: 0.5; cursor: not-allowed; }
         .qty-input { width: 70px; padding: 8px; border: 1px solid #ddd; border-radius: 6px; text-align: center; }
-
         .line-subtotal { min-width: 120px; text-align: right; font-weight: 700; color: #8B7355; }
-
         .cos-total { background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
         .cos-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
-
         .btn { display: inline-block; background: #8B7355; color: #fff; padding: 10px 18px; border: none; border-radius: 6px; cursor: pointer; text-decoration: none; font-weight: 600; }
         .btn:hover { background: #6d5c46; }
         .btn-danger { background: #dc3545; }
         .btn-danger:hover { background: #c82333; }
         .btn-success { background: #28a745; }
         .btn-success:hover { background: #218838; }
-
         .empty-cart { text-align: center; padding: 50px 20px; background: #fff; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
         .empty-cart h2 { margin-bottom: 10px; color: #8B7355; }
-
         .checkout-form { display: none; margin-top: 25px; background: #fff; border-radius: 10px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.06); }
         .checkout-form.active { display: block; }
         .checkout-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
@@ -327,7 +325,6 @@ require 'header.php';
         .checkout-group label { display: block; font-weight: 600; margin-bottom: 6px; }
         .checkout-group input, .checkout-group textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; }
         .checkout-group textarea { min-height: 90px; resize: vertical; }
-
         @media (max-width: 768px) {
             .cos-item { flex-direction: column; align-items: stretch; }
             .cos-item-img { width: 100%; height: 180px; }
