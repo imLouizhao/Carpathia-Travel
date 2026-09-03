@@ -15,13 +15,35 @@ $userRoleLabel = [
 ][$userRole] ?? 'Client';
 
 $searchTerm = $_GET['search'] ?? '';
+
+/* SEO: fiecare pagină poate seta $pageTitle / $pageDescription înainte de
+   require 'header.php'; dacă nu setează, se folosesc valori implicite. */
+$pageTitle       = $pageTitle ?? 'Carpathia Travel - Pachete turistice și vacanțe';
+$pageDescription = $pageDescription ?? 'Carpathia Travel - agenție de turism online. Descoperă pachete turistice, city break-uri, circuite și vacanțe la prețuri accesibile.';
+$canonicalUrl    = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https://' : 'http://')
+                    . ($_SERVER['HTTP_HOST'] ?? 'carpathiatravel.free.nf')
+                    . strtok($_SERVER['REQUEST_URI'] ?? '/', '?');
+$noIndex         = $noIndex ?? false;
 ?>
 <!DOCTYPE html>
 <html lang="ro">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Carpathia Travel</title>
+    <title><?php echo esc($pageTitle); ?></title>
+    <meta name="description" content="<?php echo esc($pageDescription); ?>">
+    <meta name="keywords" content="agentie de turism, pachete turistice, vacante, city break, circuite turistice, litoral, munte, Carpathia Travel">
+    <meta name="robots" content="<?php echo $noIndex ? 'noindex, nofollow' : 'index, follow'; ?>">
+    <link rel="canonical" href="<?php echo esc($canonicalUrl); ?>">
+
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="<?php echo esc($pageTitle); ?>">
+    <meta property="og:description" content="<?php echo esc($pageDescription); ?>">
+    <meta property="og:url" content="<?php echo esc($canonicalUrl); ?>">
+    <meta property="og:image" content="<?php echo esc((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https://' : 'http://') . ($_SERVER['HTTP_HOST'] ?? '') . '/alte_poze/carpathia_travel_logo.png'); ?>">
+    <meta property="og:locale" content="ro_RO">
+    <meta name="twitter:card" content="summary_large_image">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
     <link rel="icon" type="image/png" href="alte_poze/carpathia_travel_logo.png">
