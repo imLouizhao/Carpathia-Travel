@@ -3,6 +3,17 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+if (file_exists(__DIR__ . '/vendor/autoload.php')) {
+    require __DIR__ . '/vendor/autoload.php';
+} else {
+    require __DIR__ . '/PHPMailer/src/Exception.php';
+    require __DIR__ . '/PHPMailer/src/PHPMailer.php';
+    require __DIR__ . '/PHPMailer/src/SMTP.php';
+}
+
 function esc($v): string {
     return htmlspecialchars((string)($v ?? ''), ENT_QUOTES, 'UTF-8');
 }
@@ -289,4 +300,166 @@ function getImaginePrincipala($idProdus): string {
     return 'imagini/default.jpg';
 }
 
-?>
+function captchaGenerate(): array {
+    if (session_status() === PHP_SESSION_NONE) session_start();
+
+    $a = random_int(1, 9);
+    $b = random_int(1, 9);
+    $_SESSION['captcha_answer'] = $a + $b;
+    $_SESSION['captcha_question'] = "Cât fac {$a} + {$b}?";
+
+    return [
+        'question' => $_SESSION['captcha_question'],
+    ];
+}
+
+function captchaVerify(?string $raspuns, ?string $honeypot): bool {
+    if (session_status() === PHP_SESSION_NONE) session_start();
+
+    if (!empty($honeypot)) {
+        return false;
+    }
+
+    if (!isset($_SESSION['captcha_answer']) || $raspuns === null || trim($raspuns) === '') {
+        return false;
+    }
+
+    $ok = ((int)trim($raspuns) === (int)$_SESSION['captcha_answer']);
+    unset($_SESSION['captcha_answer'], $_SESSION['captcha_question']);
+
+    return $ok;
+}
+
+
+function creeazaMailer(): PHPMailer {
+    $mail = new PHPMailer(true);
+    $mail->isSMTP();
+    $mail->Host       = SMTP_HOST;
+    $mail->SMTPAuth   = true;
+    $mail->Username   = SMTP_USER;
+    $mail->Password   = SMTP_PASS;
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+    $mail->Port       = SMTP_PORT;
+    $mail->CharSet    = 'UTF-8';
+    $mail->setFrom(SMTP_FROM_EMAIL, SMTP_FROM_NAME);
+    return $mail;
+}
+
+function trimiteEmailContact(string $nume, string $emailExpeditor, string $telefon, string $subiect, string $mesaj): bool {
+    try {
+        $mail = creeazaMailer();       
+        $mail->setFrom(SMTP_FROM_EMAIL, SMTP_FROM_NAME);       
+        $mail->addAddress(SMTP_FROM_EMAIL, 'Carpathia Travel Contact');
+        $mail->addReplyTo($emailExpeditor, $nume);
+
+        $mail->Subject = "Mesaj nou site: " . $subiect;
+        
+        $body  = "Nume: {$nume}\n";
+        $body .= "Email: {$emailExpeditor}\n";
+        $body .= "Telefon: {$telefon}\n";
+        $body .= "Subiect: {$subiect}\n\n";
+        $body .= "Mesaj:\n{$mesaj}\n\n";
+        $body .= "Data: " . date('d-m-Y H:i:s');
+
+        $mail->Body = $body;
+        return $mail->send();
+    } catch (Exception $e) {
+        error_log("PHPMailer Error (Contact): " . $mail->ErrorInfo);
+        return false;
+    }
+}
+
+function trimiteEmailComanda(int $idComanda, string $numeClient, string $emailClient, string $telefonClient, string $observatii, array $itemsComanda, float $total): bool {
+    $liniiProduse = '';
+    foreach ($itemsComanda as $it) {
+        $liniiProduse .= sprintf(
+            "- %s -> %s | %d persoane x %s EUR = %s EUR\n",
+            $it['plecare'] ?? '',
+            $it['destinatie'] ?? '',
+            (int)$it['cantitate'],
+            number_format((float)$it['pret'], 2, '.', ''),
+            number_format((float)$it['pret'] * (int)$it['cantitate'], 2, '.', '')
+        );
+    }
+
+    try {
+        $mailClient = creeazaMailer();
+        $mailClient->addAddress($emailClient, $numeClient);
+        $mailClient->Subject = "Confirmare comandă #{$idComanda} - Carpathia Travel";
+
+        $body  = "Bună, {$numeClient}!\n\n";
+        $body .= "Îți mulțumim pentru rezervare. Comanda ta #{$idComanda} a fost înregistrată cu succes ";
+        $body .= "și va fi confirmată în curând de un agent Carpathia Travel.\n\n";
+        $body .= "Detalii rezervare:\n";
+        $body .= $liniiProduse . "\n";
+        $body .= "Total de plată: " . number_format($total, 2, '.', '') . " EUR\n";
+        if ($telefonClient !== '') $body .= "Telefon contact: {$telefonClient}\n";
+        if ($observatii !== '') $body .= "Observații: {$observatii}\n";
+        $body .= "\nDacă ai întrebări, ne poți contacta la " . SMTP_FROM_EMAIL . " sau la 0765 323 922.\n\n";
+        $body .= "Cu drag,\nEchipa Carpathia Travel";
+
+        $mailClient->Body = $body;
+        $mailClient->send();
+    } catch (Exception $e) {
+        error_log("PHPMailer Error (Comanda Client): " . $mailClient->ErrorInfo);
+    }
+
+    try {
+        $mailAgentie = creeazaMailer();
+        $mailAgentie->addAddress(SMTP_FROM_EMAIL, 'Departament Comenzi');
+        if (filter_var($emailClient, FILTER_VALIDATE_EMAIL)) {
+            $mailAgentie->addReplyTo($emailClient, $numeClient);
+        }
+        $mailAgentie->Subject = "Comandă nouă #{$idComanda} - {$numeClient}";
+
+        $bodyIntern  = "S-a plasat o comandă nouă pe site.\n\n";
+        $bodyIntern .= "Client: {$numeClient}\nEmail: {$emailClient}\nTelefon: {$telefonClient}\n\n";
+        $bodyIntern .= $liniiProduse . "\n";
+        $bodyIntern .= "Total: " . number_format($total, 2, '.', '') . " EUR\n";
+        if ($observatii !== '') $bodyIntern .= "Observații: {$observatii}\n";
+
+        $mailAgentie->Body = $bodyIntern;
+        $mailAgentie->send();
+    } catch (Exception $e) {
+        error_log("PHPMailer Error (Comanda Agenție): " . $mailAgentie->ErrorInfo);
+    }
+
+    return true;
+}
+
+function getCursValutarEurRon(): ?float {
+    $cacheFile = sys_get_temp_dir() . '/carpathia_curs_eur_ron.json';
+    $cacheTtl  = 600;
+
+    if (is_file($cacheFile) && (time() - filemtime($cacheFile)) < $cacheTtl) {
+        $cached = json_decode((string)file_get_contents($cacheFile), true);
+        if (isset($cached['rate']) && is_numeric($cached['rate'])) {
+            return (float)$cached['rate'];
+        }
+    }
+
+    $rate = null;
+    $context = stream_context_create([
+        'http' => ['timeout' => 3],
+        'https' => ['timeout' => 3],
+    ]);
+
+    $raw = @file_get_contents('https://open.er-api.com/v6/latest/EUR', false, $context);
+
+    if ($raw !== false) {
+        $data = json_decode($raw, true);
+        if (isset($data['rates']['RON']) && is_numeric($data['rates']['RON'])) {
+            $rate = (float)$data['rates']['RON'];
+            @file_put_contents($cacheFile, json_encode(['rate' => $rate, 'ts' => time()]));
+        }
+    }
+
+    if ($rate === null && is_file($cacheFile)) {
+        $cached = json_decode((string)file_get_contents($cacheFile), true);
+        if (isset($cached['rate'])) {
+            return (float)$cached['rate'];
+        }
+    }
+
+    return $rate;
+}
