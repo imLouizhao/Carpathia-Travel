@@ -16,6 +16,13 @@ if ($conn->connect_error) {
 
 $conn->set_charset("utf8mb4");
 
+define('SMTP_HOST', 'smtp.gmail.com');
+define('SMTP_PORT', 587);
+define('SMTP_USER', 'louissimion58@gmail.com');
+define('SMTP_PASS', 'uyma yrje msgu vlxf');
+define('SMTP_FROM_EMAIL', 'louissimion58@gmail.com');
+define('SMTP_FROM_NAME', 'Website Carpathia');
+
 error_reporting(E_ALL);
 ini_set('display_startup_errors', 1);
 ini_set('display_errors', 1);
