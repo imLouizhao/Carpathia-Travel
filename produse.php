@@ -12,6 +12,11 @@ $produse = getProduse($filtruTip, $filtruPret, $sortare, $pagina, 8);
 $totalProduse = getTotalProduse($filtruTip, $filtruPret);
 $totalPagini = (int)ceil($totalProduse / 8);
 
+$cursEurRon = getCursValutarEurRon();
+
+$pageTitle = 'Pachete turistice – Carpathia Travel';
+$pageDescription = 'Explorează toate pachetele turistice Carpathia Travel: city break, circuite, munte și litoral. Filtrează după tip și preț.';
+
 require 'header.php';
 ?>
 
@@ -19,7 +24,6 @@ require 'header.php';
 <html lang="ro">
 <head>
     <meta charset="UTF-8">
-    <title>Pachete turistice – Carpathia Travel</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -95,7 +99,12 @@ require 'header.php';
                 </p>
 
                 <div class="product-price">
-                    <?= htmlspecialchars($produs['pret'] ?? '') ?> EUR / persoană
+                    <?= htmlspecialchars((string)($produs['pret'] ?? '')) ?> EUR / persoană
+                    <?php if ($cursEurRon !== null): ?>
+                        <span style="display:block; font-size:13px; font-weight:normal; color:#888;">
+                            ≈ <?= number_format((float)($produs['pret'] ?? 0) * $cursEurRon, 0, ',', '.') ?> RON
+                        </span>
+                    <?php endif; ?>
                 </div>
 
                 <div class="product-availability <?= $class ?>">
