@@ -1,12 +1,13 @@
 <?php
-require 'header.php';
-
 $idPachet = $_GET['id'] ?? 0;
 
 if (!$idPachet) {
     header('Location: produse.php'); 
     exit;
 }
+
+require 'config.php';
+require 'functions.php';
 
 $pachet = getProdusById($idPachet); 
 
@@ -18,8 +19,15 @@ if (!$pachet) {
 $imagini = getImaginiProdus($idPachet);
 $imaginePrincipala = !empty($imagini) ? $imagini[0] : 'imagini/default.jpg';
 
-
 $pacheteSimilare = getProduseSimilare($idPachet, $pachet['tip_pachet']);
+
+$cursEurRon = getCursValutarEurRon();
+
+$pageTitle = esc($pachet['destinatie']) . ' - Carpathia Travel';
+$pageDescription = 'Pachet turistic ' . esc($pachet['tip_pachet']) . ' către ' . esc($pachet['destinatie'])
+    . ', ' . (int)$pachet['durata'] . ' zile, de la ' . esc((string)$pachet['pret']) . ' EUR / persoană.';
+
+require 'header.php';
 ?>
 
 <!DOCTYPE html>
@@ -27,7 +35,6 @@ $pacheteSimilare = getProduseSimilare($idPachet, $pachet['tip_pachet']);
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo htmlspecialchars($pachet['destinatie']); ?> - Carpathia Travel</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -36,27 +43,27 @@ $pacheteSimilare = getProduseSimilare($idPachet, $pachet['tip_pachet']);
         <div class="product-detail">
             <div class="product-gallery-large">
                 <img id="mainImage"
-                    src="<?php echo $imaginePrincipala; ?>"
-                    alt="<?php echo htmlspecialchars($pachet['destinatie']); ?>"
+                    src="<?php echo esc($imaginePrincipala); ?>"
+                    alt="<?php echo esc($pachet['destinatie']); ?>"
                     class="main-image">
 
                 <?php if (!empty($imagini)): ?>
                 <div class="thumbnail-images">
                     <?php foreach ($imagini as $index => $img): ?>
-                        <img src="<?php echo $img; ?>"
-                            alt="<?php echo htmlspecialchars($pachet['destinatie']); ?> - Imagine <?php echo $index + 1; ?>"
+                        <img src="<?php echo esc($img); ?>"
+                            alt="<?php echo esc($pachet['destinatie']); ?> - Imagine <?php echo (int)$index + 1; ?>"
                             class="thumbnail <?php echo $index === 0 ? 'active' : ''; ?>"
-                            onclick="changeMainImage('<?php echo $img; ?>', this)">
+                            onclick="changeMainImage('<?php echo esc($img); ?>', this)">
                     <?php endforeach; ?>
                 </div>
                 <?php endif; ?>
             </div>
 
             <div class="product-info">
-                <h1><?php echo htmlspecialchars($pachet['destinatie']); ?></h1>
+                <h1><?php echo esc($pachet['destinatie']); ?></h1>
                 <div class="product-stock">
                     <?php
-                    $locuriDisponibile = $pachet['locuri_disponibile'];
+                    $locuriDisponibile = (int)$pachet['locuri_disponibile'];
                     if($locuriDisponibile > 1): ?>
                         <span class="available">✓ Locuri disponibile</span>
                     <?php elseif($locuriDisponibile == 1): ?>
@@ -66,17 +73,25 @@ $pacheteSimilare = getProduseSimilare($idPachet, $pachet['tip_pachet']);
                     <?php endif; ?>
                 </div>
 
-                <div class="product-price"><?php echo $pachet['pret']; ?> EUR </div>
+                <div class="product-price">
+                    <?php echo esc((string)$pachet['pret']); ?> EUR
+                    <?php if ($cursEurRon !== null): ?>
+                        <span style="display:block; font-size:14px; font-weight:normal; color:#888;">
+                            ≈ <?php echo number_format((float)$pachet['pret'] * $cursEurRon, 0, ',', '.'); ?> RON
+                            <small>(curs orientativ EUR/RON actualizat automat)</small>
+                        </span>
+                    <?php endif; ?>
+                </div>
 
                 <div class="product-description" style="white-space: pre-line;">
-                    <?php echo htmlspecialchars($pachet['descriere']); ?>
+                    <?php echo esc($pachet['descriere']); ?>
                 </div>
 
                 <form method="POST" action="adauga_cos.php" class="add-to-cart-form">
-                    <input type="hidden" name="id_produs" value="<?php echo $pachet['id']; ?>">
+                    <input type="hidden" name="id_produs" value="<?php echo (int)$pachet['id']; ?>">
                     <div class="quantity-selector">
                         <label for="quantity">Număr persoane:</label>
-                        <input type="number" id="quantity" name="quantity" value="1" min="1" max="<?php echo $locuriDisponibile; ?>" <?php echo $locuriDisponibile == 0 ? 'disabled' : ''; ?>>
+                        <input type="number" id="quantity" name="quantity" value="1" min="1" max="<?php echo (int)$locuriDisponibile; ?>" <?php echo $locuriDisponibile == 0 ? 'disabled' : ''; ?>>
                     </div>
                     <button type="submit" class="add-to-cart-large" <?php echo $locuriDisponibile == 0 ? 'disabled' : ''; ?>>
                         <?php echo $locuriDisponibile == 0 ? 'Pachet epuizat' : 'Rezervă acum'; ?>
@@ -90,15 +105,15 @@ $pacheteSimilare = getProduseSimilare($idPachet, $pachet['tip_pachet']);
             <h2>Pachete similare</h2>
             <div class="products-grid">
                 <?php while($pachetSimilar = $pacheteSimilare->fetch_assoc()):
-                    $locuriSimilar = $pachetSimilar['locuri_disponibile'];
+                    $locuriSimilar = (int)$pachetSimilar['locuri_disponibile'];
                 ?>
                     <div class="product-card">
-                        <a href="produs.php?id=<?php echo $pachetSimilar['id']; ?>" class="product-link">
-                            <div class="product-img" style="background-image: url('<?php echo $pachetSimilar['imagine_principala']; ?>');"></div>
+                        <a href="produs.php?id=<?php echo (int)$pachetSimilar['id']; ?>" class="product-link">
+                            <div class="product-img" style="background-image: url('<?php echo esc($pachetSimilar['imagine_principala'] ?? 'imagini/default.jpg'); ?>');"></div>
                         </a>
                         <div class="product-content">
-                            <a href="produs.php?id=<?php echo $pachetSimilar['id']; ?>" class="product-link">
-                                <h3 class="product-title"><?php echo htmlspecialchars($pachetSimilar['destinatie']); ?></h3>
+                            <a href="produs.php?id=<?php echo (int)$pachetSimilar['id']; ?>" class="product-link">
+                                <h3 class="product-title"><?php echo esc($pachetSimilar['destinatie']); ?></h3>
                             </a>
 
                             <div class="product-stock">
@@ -111,11 +126,11 @@ $pacheteSimilare = getProduseSimilare($idPachet, $pachet['tip_pachet']);
                                 <?php endif; ?>
                             </div>
 
-                            <div class="product-price-card"><?php echo $pachetSimilar['pret']; ?> EUR</div>
+                            <div class="product-price-card"><?php echo esc((string)$pachetSimilar['pret']); ?> EUR</div>
 
                             <?php if($locuriSimilar > 0): ?>
                             <form method="POST" action="adauga_cos.php" class="add-to-cart-form">
-                                <input type="hidden" name="id_produs" value="<?php echo $pachetSimilar['id']; ?>">
+                                <input type="hidden" name="id_produs" value="<?php echo (int)$pachetSimilar['id']; ?>">
                                 <button type="submit" class="add-to-cart">
                                     Rezervă acum
                                 </button>
