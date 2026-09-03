@@ -54,9 +54,6 @@ require 'header.php';
                     Browser-ul tău nu suportă redarea video. Poți descărca materialul
                     <a href="alte_poze/carpathia_travel_prezentare.mp4">aici</a>.
                 </video>
-                <p style="text-align:center; color:#666; margin-top:10px;">
-                    Un scurt material video de prezentare a agenției Carpathia Travel.
-                </p>
             </div>
         </div>
     </section>
