@@ -45,19 +45,6 @@ require 'header.php';
         </div>
     </section>
 
-    <section class="about-section" style="padding-top:0;">
-        <div class="container">
-            <h2 class="section-title">Prezentarea agenției</h2>
-            <div style="max-width:900px; margin:0 auto;">
-                <video controls preload="none" poster="alte_poze/turism_photo.jpg" style="width:100%; border-radius:10px; box-shadow:0 5px 15px rgba(0,0,0,0.1); display:block;">
-                    <source src="alte_poze/carpathia_travel_prezentare.mp4" type="video/mp4">
-                    Browser-ul tău nu suportă redarea video. Poți descărca materialul
-                    <a href="alte_poze/carpathia_travel_prezentare.mp4">aici</a>.
-                </video>
-            </div>
-        </div>
-    </section>
-
     <section class="values">
         <div class="container">
             <h2 class="section-title">Valorile noastre</h2>
